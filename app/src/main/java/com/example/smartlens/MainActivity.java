@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            Toast.makeText(context, "No hay dispositivos Bluetooth", Toast.LENGTH_SHORT).show();
+            //SI SALE JEFEEEEEE
+            Toast.makeText(context, "El dispositivo no soporta conexion a Bluetooth", Toast.LENGTH_SHORT).show();
         }
     }
 
