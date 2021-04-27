@@ -42,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_WRITE = 2;
     public static final int MESSAGE_DEVICE_NAME = 3;
     public static final int MESSAGE_TOAST = 4;
+    private BluetoothSocket btSocket = null;
+    private static String address = null;
+
 
     public static final String DEVICE_NAME = "deviceName";
     public static final String TOAST = "toast";
     private String connectedDevice;
+    private  boolean flag;
 
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -98,18 +102,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (flag == true) {
+            flag = false;
+            Intent intent = getIntent();
+            String address = intent.getStringExtra("deviceAddress");
+            //Setea la direccion MAC
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+
+
+            btUtils.connect2(bluetoothAdapter.getRemoteDevice(address));
+
+        }
         context=this;
 
         inicialziarBT();
 
         btUtils = new BTUtils(context, handler);
 
+
+
         ImageButton bluetooth = (ImageButton) findViewById(R.id.imageButton5);
         bluetooth.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
+                flag = true;
                 encenderBT();
                 revisarPermisos();
 

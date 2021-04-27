@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,9 +39,11 @@ public class ListaDispositivos extends AppCompatActivity {
 
         inicializar();
 
-     /*   listaEmparejados.setOnClickListener(new View.OnClickListener() {
+        listaEmparejados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
 
                 finishAffinity();
 
@@ -48,10 +51,12 @@ public class ListaDispositivos extends AppCompatActivity {
                 // mientras toma un EXTRA_DEVICE_ADDRESS que es la dirección MAC.
                 Intent intend = new Intent(ListaDispositivos.this, MainActivity.class);
                 intend.putExtra("deviceAddress", address);
+                Log.d("MAC", " "+address);
                 startActivity(intend);
 
             }
-        });*/
+        });
+
 
     }
 
