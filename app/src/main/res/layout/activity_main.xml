@@ -25,7 +25,7 @@
             android:id="@+id/pawPet"
             android:layout_width="@dimen/principal_logoW"
             android:layout_height="@dimen/principal_logoH"
-            app:srcCompat="@drawable/logoakaappr"
+            app:srcCompat="@drawable/logoakaapp"
             tools:layout_editor_absoluteX="16dp"
             app:tint="#FFFFFF" />
 
