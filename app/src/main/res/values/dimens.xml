@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="principal_card">150dp</dimen>
+    <dimen name="principal_logoH">70dp</dimen>
+    <dimen name="principal_logoW">60dp</dimen>
+    <dimen name="principal_opcionesW">60dp</dimen>
+    <dimen name="principal_opcionesH">50dp</dimen>
+    <dimen name="modoW">250dp</dimen>
+    <dimen name="modoH">200dp</dimen>
+    <dimen name="WseleccionarCW">300dp</dimen>
+    <dimen name="cvVideosH">80dp</dimen>
+</resources>
