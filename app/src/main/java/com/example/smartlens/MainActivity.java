@@ -40,6 +40,8 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    // Declarar las variables que se utilizaran
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     //BluetoothSocket mmSocket;
     BluetoothDevice mmDevice = null;
@@ -47,14 +49,18 @@ public class MainActivity extends AppCompatActivity {
     static String VideoSeleccionado;
     private ProgressBar progressBar;
 
+    //"Manejador" que ayuda a controlar todos los mensajes enviados por el BT
     private Handler mHandler= new MyHandler(this);
 
     private class MyHandler extends Handler{
+        //crea un contexto para la clase de la cual se recibiran los mensajes
         private WeakReference<MainActivity> mActivity;
+        //Constructo de la clase, obtiene como parametro la actividad
         public MyHandler(MainActivity activity) {
             mActivity = new WeakReference<MainActivity>(activity);
             //context=activity.getApplicationContext();
         }
+        //SE soobreescribe el metodo para manejar los mensajes, que hacer en caso de que llegue un mensaje nuevo
         @Override
         public void handleMessage(Message msg) {
             byte[] buffer = (byte[]) msg.obj;
@@ -71,19 +77,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Lineas por defecto para inicializar la vista
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Ayuda visual para mostrar que se esta estableciendo la conexion al BT
         progressBar = (ProgressBar) findViewById(R.id.pbConnectBT);
         EncenderBlue();
 
-
+        //Se crea un boton que tendra como refencia el BT y poder implementar los metodos que siguen
         ImageButton bluetooth = (ImageButton) findViewById(R.id.imageButton5);
+        //Habilitamos que el boton este al pendiente de ser apretado
         bluetooth.setOnClickListener(new View.OnClickListener() {
 
+            //Al hacer click en el boton BT automaticamente se ejecuta metodo y el codigo que contenga en el
             @Override
             public void onClick(View v) {
 
+                //Metodo para confirmar que la app ya esta emparejada con la Raspberry
                 ObtenerDatosRaspBerry();
+                // Verifica los persimos si la version de android es mayor a la loolilop y si no los tiene los pide
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         System.out.println("Entro al if");
@@ -97,15 +110,18 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-
                 }
 
+                //STring que indica el protocolo de comunicacion y el tipo dispositivo a conectar
                 UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
 
+                //Activamos la progressbar
                 progressBar.setVisibility(View.VISIBLE);
 
+                //SE intenta establecer la conexion con la Raspberry
                 mmBluetoothService=new BluetoothService(MainActivity.this,mmDevice,uuid, mHandler);
 
+                //Si la conexion fue exitosa, se quita la visibilidad de la progressbar
                 if (mmBluetoothService != null)
                 {
                     progressBar.setVisibility(View.GONE);
@@ -116,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    //Verifica si el BT esta encendido, sino lo enciende
     private void EncenderBlue() {
         if (!bluetoothAdapter.isEnabled()) {
             Intent intentBlEnable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -125,7 +143,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Metodo que verifica todos los dispositivos emparejados en el smartphone y busca el que llama Raspberry
     private void ObtenerDatosRaspBerry() {
+
+        //Obtiene la lista de todos los dispositivos vinculados
         Set<BluetoothDevice> DispositivosVinculados = bluetoothAdapter.getBondedDevices();
         //obtener la direccion MAC de la raspberry
         if (DispositivosVinculados.size() > 0) {
