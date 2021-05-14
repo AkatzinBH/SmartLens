@@ -9,18 +9,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.accessibilityservice.AccessibilityService;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -33,13 +40,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
 
     // Declarar las variables que se utilizaran
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -48,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
     BluetoothService mmBluetoothService = null;
     static String VideoSeleccionado;
     private ProgressBar progressBar;
+    private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
+    private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
+    private AlertDialog enableNotificationListenerAlertDialog;
+    private ReceiveBroadcastReceiver imageChangeBroadcastReceiver;
+    private ArrayList<Notificacion> notificaciones = new ArrayList<>();
 
     //"Manejador" que ayuda a controlar todos los mensajes enviados por el BT
     private Handler mHandler= new MyHandler(this);
@@ -83,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Ayuda visual para mostrar que se esta estableciendo la conexion al BT
         progressBar = (ProgressBar) findViewById(R.id.pbConnectBT);
+        // If the user did not turn the notification listener service on we prompt him to do so
+        if(!isNotificationServiceEnabled()){
+            enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog();
+            enableNotificationListenerAlertDialog.show();
+        }
         EncenderBlue();
 
         //Se crea un boton que tendra como refencia el BT y poder implementar los metodos que siguen
@@ -129,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        imageChangeBroadcastReceiver = new ReceiveBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.ssa_ezra.whatsappmonitoring");
+        registerReceiver(imageChangeBroadcastReceiver,intentFilter);
 
     }
 
@@ -203,7 +227,19 @@ public class MainActivity extends AppCompatActivity {
     public void MensajeNotificaciones(View view){
         if (mmBluetoothService != null)
         {
-            mmBluetoothService.write("Notificaciones");
+            if (notificaciones.size() > 0)
+            {   mmBluetoothService.write("Notificacion");
+                for (Notificacion notificacion : notificaciones)
+                {
+                    //String noti = "";
+                    mmBluetoothService.write(notificacion.getPaquete());
+                    mmBluetoothService.write(notificacion.getRemitente());
+                    mmBluetoothService.write(notificacion.getMensaje());
+                    mmBluetoothService.write(notificacion.getFechahora());
+                }
+                notificaciones.clear();
+            }
+
         }
         else
         {
@@ -229,6 +265,170 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
+    /**
+     * Change Intercepted Notification Image
+     * Changes the MainActivity image based on which notification was intercepted
+     * @param notificationCode The intercepted notification code
+     */
+ /*   private void changeInterceptedNotificationImage(int notificationCode){
+        switch(notificationCode){
+            case Notificaciones.InterceptedNotificationCode.FACEBOOK_CODE:
+                    Toast.makeText(this,"Facebook",Toast.LENGTH_SHORT).show();
+                Log.d("NotificacionInt", "La notificacion interceptada fue de: Facebook");
+                break;
+            case Notificaciones.InterceptedNotificationCode.INSTAGRAM_CODE:
+                Toast.makeText(this,"Instagram",Toast.LENGTH_SHORT).show();
+                Log.d("NotificacionInt", "La notificacion interceptada fue de: Instagram");
+                break;
+            case Notificaciones.InterceptedNotificationCode.WHATSAPP_CODE:
+                Toast.makeText(this,"Whatsapp",Toast.LENGTH_SHORT).show();
+                Log.d("NotificacionInt", "La notificacion interceptada fue de: Whastapp");
+                break;
+            case Notificaciones.InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE:
+                Toast.makeText(this,"Otras apps",Toast.LENGTH_SHORT).show();
+                Log.d("NotificacionInt", "La notificacion interceptada fue de: Otro servicio");
+                break;
+        }
+    }
+*/
+    /**
+     * Is Notification Service Enabled.
+     * Verifies if the notification listener service is enabled.
+     * Got it from: https://github.com/kpbird/NotificationListenerService-Example/blob/master/NLSExample/src/main/java/com/kpbird/nlsexample/NLService.java
+     * @return True if enabled, false otherwise.
+     */
+    private boolean isNotificationServiceEnabled(){
+        String pkgName = getPackageName();
+        final String flat = Settings.Secure.getString(getContentResolver(),
+                ENABLED_NOTIFICATION_LISTENERS);
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (int i = 0; i < names.length; i++) {
+                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
+                if (cn != null) {
+                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Image Change Broadcast Receiver.
+     * We use this Broadcast Receiver to notify the Main Activity when
+     * a new notification has arrived, so it can properly change the
+     * notification image
+     * */
+  /*  public class ImageChangeBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
+            changeInterceptedNotificationImage(receivedNotificationCode);
+        }
+    }*/
+
+
+    /**
+     * Build Notification Listener Alert Dialog.
+     * Builds the alert dialog that pops up if the user has not turned
+     * the Notification Listener Service on yet.
+     * @return An alert dialog which leads to the notification enabling screen
+     */
+    private AlertDialog buildNotificationServiceAlertDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(R.string.notification_listener_service);
+        alertDialogBuilder.setMessage(R.string.notification_listener_service_explanation);
+        alertDialogBuilder.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                    }
+                });
+        alertDialogBuilder.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // If you choose to not enable the notification listener
+                        // the app. will not work as expected
+                    }
+                });
+        return(alertDialogBuilder.create());
+    }
+
+
+    /**
+     * Receive Broadcast Receiver.
+     * */
+    public class ReceiveBroadcastReceiver extends BroadcastReceiver {
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("Entra al metodo");
+
+            int receivedNotificationCode = intent.getIntExtra("Notification Code",-1);
+            String packages = intent.getStringExtra("package");
+            String title = intent.getStringExtra("title");
+            String text = intent.getStringExtra("text");
+
+            if(text != null) {
+
+                if(!text.contains("nuevos mensajes") && !text.contains("WhatsApp Web está actualmente activo") && !text.contains("new messages") && !text.contains("WhatsApp Web is currently active") && !text.contains("WhatsApp Web login")) {
+
+                    String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+                    String devicemodel = android.os.Build.MANUFACTURER+android.os.Build.MODEL+android.os.Build.BRAND+android.os.Build.SERIAL;
+
+                    DateFormat df = new SimpleDateFormat("yyyy.MM.dd 'a las' HH:mm:ss");
+                    String date = df.format(Calendar.getInstance().getTime());
+
+                    //tvMsg.setText("Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
+
+                     Log.d("DetailsEzraatext2 :", "Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
+                     notificaciones.add(new Notificacion(text, title,packages,date));
+                }
+                else
+                {
+                    Log.d("Main:", "Text contiene mensajes no necesarios");
+
+                }
+            }
+            Log.d("Main:", "Text es nulo");
+
+        }
+    }
+
+
+    private boolean isAccessibilityOn (Context context, Class<? extends AccessibilityService> clazz) {
+        int accessibilityEnabled = 0;
+        final String service = context.getPackageName () + "/" + clazz.getCanonicalName ();
+        try {
+            accessibilityEnabled = Settings.Secure.getInt (context.getApplicationContext ().getContentResolver (), Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException ignored) {  }
+
+        TextUtils.SimpleStringSplitter colonSplitter = new TextUtils.SimpleStringSplitter (':');
+
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString (context.getApplicationContext ().getContentResolver (), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                colonSplitter.setString (settingValue);
+                while (colonSplitter.hasNext ()) {
+                    String accessibilityService = colonSplitter.next ();
+
+                    if (accessibilityService.equalsIgnoreCase (service)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 
 }
