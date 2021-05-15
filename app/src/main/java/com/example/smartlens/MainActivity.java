@@ -225,29 +225,31 @@ public class MainActivity extends AppCompatActivity {
 
     //Método para el botón Notificaciones
     public void MensajeNotificaciones(View view){
-       // if (mmBluetoothService != null)
-        //{
+       if (mmBluetoothService != null)
+        {
+            mmBluetoothService.write("Notificaciones");
             if (notificaciones.size() > 0)
-            {   //mmBluetoothService.write("Notificacion");
+            {
                 for (Notificacion notificacion : notificaciones)
                 {
-                    //String noti = "";
-                   // mmBluetoothService.write(notificacion.getPaquete());
-                    //mmBluetoothService.write(notificacion.getRemitente());
-                    //mmBluetoothService.write(notificacion.getMensaje());
-                    //mmBluetoothService.write(notificacion.getFechahora());
+                    String noti = "";
+                    mmBluetoothService.write(" " + notificacion.getPaquete() + " ");
+                    mmBluetoothService.write(notificacion.getRemitente() + " ");
+                    mmBluetoothService.write(notificacion.getMensaje() + " ");
+                    mmBluetoothService.write(notificacion.getFechahora() + "\n");
 
-                    System.out.println("Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
+                    Log.d ("NotiBT","Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
 
                 }
+                mmBluetoothService.write("Fin");
                 notificaciones.clear();
-          //  }
+            }
 
         }
-        //else
-        //{
-          //  Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        //}
+        else
+        {
+            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+        }
     }
 
     //Método para el botón BT

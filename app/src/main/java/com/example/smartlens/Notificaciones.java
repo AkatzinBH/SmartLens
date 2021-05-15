@@ -29,6 +29,8 @@ public class Notificaciones extends NotificationListenerService
      listen the notifications
   */
     private static final class ApplicationPackageNames {
+        public static final String INCALLUI_PACK_NAME = "com.android.incallui";
+        public static final String LLAMADAPERDIDA_PACK_NAME = "com.android.contacts";
         public static final String FACEBOOK_PACK_NAME = "com.facebook.katana";
         public static final String FACEBOOK_MESSENGER_PACK_NAME = "com.facebook.orca";
         public static final String WHATSAPP_PACK_NAME = "com.whatsapp";
@@ -49,7 +51,9 @@ public class Notificaciones extends NotificationListenerService
         public static final int TELEGRAM_CODE = 4;
         public static final int GMAIL_CODE = 5;
         public static final int SMS_CODE = 6;
-        public static final int OTHER_NOTIFICATIONS_CODE = 7; // We ignore all notification with code == 4
+        public static final int INCALLUI_CODE = 7;
+        public static final int LLAMADAPERDIDA_CODE = 8;
+        public static final int OTHER_NOTIFICATIONS_CODE = 9; // We ignore all notification with code == 7
     }
 
     @Override
@@ -57,7 +61,9 @@ public class Notificaciones extends NotificationListenerService
 
         return super.onBind(intent);
     }
-
+    /*
+            onNotificationPosted: cada vez que llegue una notificación, se ejecuta el método y obtiene la información.
+         */
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
 
@@ -194,6 +200,12 @@ public class Notificaciones extends NotificationListenerService
         }
         else if(packageName.equals(ApplicationPackageNames.SMS_PACK_NAME)){
             return(InterceptedNotificationCode.SMS_CODE);
+        }
+        else if(packageName.equals(ApplicationPackageNames.INCALLUI_PACK_NAME)){
+            return(InterceptedNotificationCode.INCALLUI_CODE);
+        }
+        else if(packageName.equals(ApplicationPackageNames.LLAMADAPERDIDA_PACK_NAME)){
+            return(InterceptedNotificationCode.LLAMADAPERDIDA_CODE);
         }
         else{
             return(InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE);
