@@ -273,14 +273,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void llamdaentrantre()
     {
+        Log.d("IfMet:", "Entra el if del Metodo");
         if (mmBluetoothService != null)
         {
+            Log.d("IfMet:", "Intenta mandar");
             mmBluetoothService.write("Llamada");
             mmBluetoothService.write("\n");
             mmBluetoothService.write(" " + llamada.getPaquete() + " ");
             mmBluetoothService.write(llamada.getRemitente() + " ");
             mmBluetoothService.write(llamada.getMensaje() + " ");
             mmBluetoothService.write(llamada.getFechahora() + "\n");
+            mmBluetoothService.write("Fin");
         }
         else
         {
@@ -412,9 +415,10 @@ public class MainActivity extends AppCompatActivity {
                     String date = df.format(Calendar.getInstance().getTime());
 
                     //tvMsg.setText("Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
-
-                    if (packages == "com.android.incallui")
+                    Log.d("If llamada:", "Antes del if : " + packages);
+                    if (packages.contains("com.android.incallui"))
                     {
+                        Log.d("If llamada:", "Entra el if de la llamada");
                         llamada = new Notificacion(text, title,packages,date);
                         llamdaentrantre();
                     }
