@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog enableNotificationListenerAlertDialog;
     private ReceiveBroadcastReceiver imageChangeBroadcastReceiver;
     private ArrayList<Notificacion> notificaciones = new ArrayList<>();
+    private Notificacion llamada;
 
     //"Manejador" que ayuda a controlar todos los mensajes enviados por el BT
     private Handler mHandler= new MyHandler(this);
@@ -270,6 +271,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void llamdaentrantre()
+    {
+        if (mmBluetoothService != null)
+        {
+            mmBluetoothService.write("Llamada");
+            mmBluetoothService.write("\n");
+            mmBluetoothService.write(" " + llamada.getPaquete() + " ");
+            mmBluetoothService.write(llamada.getRemitente() + " ");
+            mmBluetoothService.write(llamada.getMensaje() + " ");
+            mmBluetoothService.write(llamada.getFechahora() + "\n");
+        }
+        else
+        {
+            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -395,6 +413,11 @@ public class MainActivity extends AppCompatActivity {
 
                     //tvMsg.setText("Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
 
+                    if (packages == "com.android.incallui")
+                    {
+                        llamada = new Notificacion(text, title,packages,date);
+                        llamdaentrantre();
+                    }
                      Log.d("DetailsEzraatext2 :", "Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
                      notificaciones.add(new Notificacion(text, title,packages,date));
                 }
