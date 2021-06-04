@@ -196,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
         }
+        Intent intent = new Intent(this, Temporizador.class);
+        startActivity(intent);
 
 
     }
@@ -287,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+            Toast.makeText(this, "No hay conexion BT llamada entrante", Toast.LENGTH_SHORT) .show();
         }
     }
 
@@ -416,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //tvMsg.setText("Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
                     Log.d("If llamada:", "Antes del if : " + packages);
-                    if (packages.contains("com.android.incallui"))
+                    if (packages.matches("com.samsung.android.incallui")) //"com.android.incallui"
                     {
                         Log.d("If llamada:", "Entra el if de la llamada");
                         llamada = new Notificacion(text, title,packages,date);
