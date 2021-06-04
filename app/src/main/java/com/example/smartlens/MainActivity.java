@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -228,23 +229,63 @@ public class MainActivity extends AppCompatActivity {
     public void MensajeNotificaciones(View view){
        if (mmBluetoothService != null)
         {
-            mmBluetoothService.write("Notificaciones");
-            if (notificaciones.size() > 0)
-            {
-                for (Notificacion notificacion : notificaciones)
-                {
-                    String noti = "";
-                    mmBluetoothService.write(" " + notificacion.getPaquete() + " ");
-                    mmBluetoothService.write(notificacion.getRemitente() + " ");
-                    mmBluetoothService.write(notificacion.getMensaje() + " ");
-                    mmBluetoothService.write(notificacion.getFechahora() + "\n");
-
-                    Log.d ("NotiBT","Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
+            mmBluetoothService.write("Noti");
+            Log.d("btnNoti","entro");
+           /* new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
 
                 }
-                mmBluetoothService.write("Fin");
-                notificaciones.clear();
-            }
+
+                @Override
+                public void onFinish() {
+                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
+                    mmBluetoothService.write(Integer.toString(notificaciones.size()));
+                }
+            }.start();
+            */
+            new CountDownTimer(1000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                public void onFinish() {
+                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
+                    if (notificaciones.size() > 0)
+                    {
+                        for (Notificacion notificacion : notificaciones)
+                        {
+                            String noti = "";
+                            mmBluetoothService.write(" " + notificacion.getPaquete() + " ");
+                            mmBluetoothService.write(notificacion.getRemitente() + " ");
+                            mmBluetoothService.write(notificacion.getMensaje() + " ");
+                            mmBluetoothService.write(notificacion.getFechahora() + "\n");
+                            mmBluetoothService.write("");
+
+                            Log.d ("NotiBT","Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
+
+                        }
+                        Log.d("NotiBT","Sale del For");
+                        new CountDownTimer(1000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                mmBluetoothService.write("Fin");
+                            }
+                        }.start();
+
+                    }
+                    else {
+                        mmBluetoothService.write("Fin");
+                    }
+
+                }
+            }.start();
 
         }
         else
@@ -423,7 +464,9 @@ public class MainActivity extends AppCompatActivity {
                         llamdaentrantre();
                     }
                      Log.d("DetailsEzraatext2 :", "Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
-                     notificaciones.add(new Notificacion(text, title,packages,date));
+                    if (notificaciones.size()>10)
+                    {notificaciones.clear();}
+                    notificaciones.add(new Notificacion(text, title,packages,date));
                 }
                 else
                 {
