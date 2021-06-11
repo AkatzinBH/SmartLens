@@ -197,8 +197,6 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
         }
-        Intent intent = new Intent(this, Temporizador.class);
-        startActivity(intent);
 
 
     }
@@ -226,6 +224,32 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
         }
     }
+
+    public void MensajeTemporizador(View view){
+        /*if (mmBluetoothService != null)
+        {
+            mmBluetoothService.write("Clima");
+        }
+        else
+        {
+            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+        }*/
+
+        Intent intent = new Intent(this,Temporizador.class);
+        startActivity(intent);
+    }
+
+    public void MensajeImagen(View view){
+        if (mmBluetoothService != null)
+        {
+            mmBluetoothService.write("Imagen");
+        }
+        else
+        {
+            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+        }
+    }
+
 
     //Método para el botón Notificaciones
     public void MensajeNotificaciones(View view){
