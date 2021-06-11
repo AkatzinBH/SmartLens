@@ -8,22 +8,6 @@
     tools:context=".MainActivity">
 
 
-    <ImageButton
-        android:id="@+id/imageButton7"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_galer_a_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeImagen"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.972"
-        app:showAsAction="always" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -60,110 +44,19 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_akanotificaci_n_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeNotificaciones"
-        android:scaleType="fitStart"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMenuPrincial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintVertical_bias="0.143">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_reloj_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeReloj"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_clima_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeClima"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton4"
-        app:layout_constraintHorizontal_bias="0.043"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
-
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_bluetooth_02"
-        android:contentDescription="@string/IB"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.69"
-        app:showAsAction="always" />
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_informaci_n_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeInfo"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.69" />
-
-    <ImageButton
-        android:id="@+id/imageButton8"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_temporizador_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeTemporizador"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.972" />
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:background="@drawable/iconos_aka_calendario_02"
-        android:contentDescription="@string/IB"
-        android:onClick="MensajeCalendario"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142" />
+    </androidx.recyclerview.widget.RecyclerView>
 
     <ProgressBar
         android:id="@+id/pbConnectBT"
