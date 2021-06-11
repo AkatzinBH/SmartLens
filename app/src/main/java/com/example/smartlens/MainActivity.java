@@ -531,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
             case 5:
                 Intent intent = new Intent(this,Temporizador.class);
-                intent.putExtra("BT", mmDevice.getAddress());
+                //intent.putExtra("BT", mmDevice.getAddress());
                 startActivity(intent);
                 break;
 

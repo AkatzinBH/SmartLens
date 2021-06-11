@@ -36,7 +36,7 @@ public class Temporizador extends AppCompatActivity {
     private BluetoothDevice mmDevice;
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    private Handler mHandler= new Temporizador.MyHandler2(this);
+    /*private Handler mHandler= new Temporizador.MyHandler2(this);
 
     private class MyHandler2 extends Handler{
         //crea un contexto para la clase de la cual se recibiran los mensajes
@@ -60,12 +60,12 @@ public class Temporizador extends AppCompatActivity {
     }
 
     int REQUEST_ENABLE_BL = 1;
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temporizador);
-        UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
+  /*      UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
         Set<BluetoothDevice> DispositivosVinculados = bluetoothAdapter.getBondedDevices();
         //obtener la direccion MAC de la raspberry
         if (DispositivosVinculados.size() > 0) {
@@ -78,7 +78,7 @@ public class Temporizador extends AppCompatActivity {
         }
 
         mmBluetoothService=new BluetoothService(Temporizador.this,mmDevice,uuid, mHandler);
-
+*/
         horas = (EditText) findViewById(R.id.etHoras);
         min = (EditText) findViewById(R.id.etMin);
         seg = (EditText) findViewById(R.id.etSegundos);
@@ -192,14 +192,7 @@ public class Temporizador extends AppCompatActivity {
             public void onFinish() {
 
                 iniciarP.setText("Iniciar");
-                if (mmBluetoothService != null)
-                {
-                    mmBluetoothService.write("Temporizador");
-                }
-                else
-                    {
-                        Toast.makeText(Temporizador.this, "No hay conexion bluetooth", Toast.LENGTH_LONG).show();
-                }
+
                 flag = true;
 
             }
