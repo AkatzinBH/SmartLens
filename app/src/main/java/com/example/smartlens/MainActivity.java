@@ -3,8 +3,10 @@ package com.example.smartlens;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +51,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements onOpcionListener {
+
+    private ArrayList<Menu> opciones;
+    private RecyclerView listaOpciones;
 
     // Declarar las variables que se utilizaran
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -97,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        opciones = new ArrayList<Menu>();
+
+        opciones.add(new Menu(R.drawable.iconos_aka_reloj_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_calendario_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_clima_02));
+        opciones.add(new Menu(R.drawable.iconos_akanotificaci_n_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_galer_a_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_temporizador_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_bluetooth_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_informaci_n_02));
+
+        listaOpciones = (RecyclerView) findViewById(R.id.rvMenuPrincial);
+        GridLayoutManager glm = new GridLayoutManager(this,2);
+        listaOpciones.setLayoutManager(glm);
+        MenuAdaptador adaptador = new MenuAdaptador(opciones,this);
+        listaOpciones.setAdapter(adaptador);
+
         //Ayuda visual para mostrar que se esta estableciendo la conexion al BT
         progressBar = (ProgressBar) findViewById(R.id.pbConnectBT);
         // If the user did not turn the notification listener service on we prompt him to do so
@@ -107,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
         EncenderBlue();
 
         //Se crea un boton que tendra como refencia el BT y poder implementar los metodos que siguen
-        ImageButton bluetooth = (ImageButton) findViewById(R.id.imageButton5);
+        //ImageButton bluetooth = (ImageButton) findViewById(R.id.imageButton5);
         //Habilitamos que el boton este al pendiente de ser apretado
-        bluetooth.setOnClickListener(new View.OnClickListener() {
+        /*bluetooth.setOnClickListener(new View.OnClickListener() {
 
             //Al hacer click en el boton BT automaticamente se ejecuta metodo y el codigo que contenga en el
             @Override
@@ -149,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
         imageChangeBroadcastReceiver = new ReceiveBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -389,6 +411,173 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 */
+    private static final String TAG = "MyActivity";
+
+    public void onOpcionClick(int position) {
+
+        int posicion = position;
+        Log.i(TAG, "Posicion para el switch: " + posicion);
+
+        switch (posicion) {
+
+            case 0:
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Reloj");
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+                break;
+            case 1:
+                Log.i(TAG, "Entro a la posicion 1 ");
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Calendario");
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+                break;
+            case 2:
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Clima");
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+                break;
+            case 3:
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Noti");
+                    Log.d("btnNoti","entro");
+           /* new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
+                    mmBluetoothService.write(Integer.toString(notificaciones.size()));
+                }
+            }.start();
+            */
+                    new CountDownTimer(1000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        public void onFinish() {
+                            Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
+                            if (notificaciones.size() > 0)
+                            {
+                                for (Notificacion notificacion : notificaciones)
+                                {
+                                    String noti = "";
+                                    mmBluetoothService.write(" " + notificacion.getPaquete() + " ");
+                                    mmBluetoothService.write(notificacion.getRemitente() + " ");
+                                    mmBluetoothService.write(notificacion.getMensaje() + " ");
+                                    mmBluetoothService.write(notificacion.getFechahora() + "\n");
+                                    mmBluetoothService.write("");
+
+                                    Log.d ("NotiBT","Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
+
+                                }
+                                Log.d("NotiBT","Sale del For");
+                                new CountDownTimer(1000, 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        mmBluetoothService.write("Fin");
+                                    }
+                                }.start();
+
+                            }
+                            else {
+                                mmBluetoothService.write("Fin");
+                            }
+
+                        }
+                    }.start();
+
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+                break;
+            case 4:
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Imagen");
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+                break;
+            case 5:
+                Intent intent = new Intent(this,Temporizador.class);
+                startActivity(intent);
+                break;
+
+            case 6:
+                //Metodo para confirmar que la app ya esta emparejada con la Raspberry
+                ObtenerDatosRaspBerry();
+                // Verifica los persimos si la version de android es mayor a la loolilop y si no los tiene los pide
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("Entro al if");
+
+
+                    } else {
+                        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+                            Toast.makeText(getBaseContext(), "Necesitamos agregar permisos de lectura", Toast.LENGTH_SHORT).show();
+
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+
+
+                    }
+                }
+
+                //STring que indica el protocolo de comunicacion y el tipo dispositivo a conectar
+                UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
+
+                //Activamos la progressbar
+                progressBar.setVisibility(View.VISIBLE);
+
+                //SE intenta establecer la conexion con la Raspberry
+                mmBluetoothService=new BluetoothService(MainActivity.this,mmDevice,uuid, mHandler);
+
+                //Si la conexion fue exitosa, se quita la visibilidad de la progressbar
+                if (mmBluetoothService != null)
+                {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+
+                break;
+                case 7:
+                //imagen
+                break;
+            default:
+                break;
+        }
+
+
+    }
     /**
      * Is Notification Service Enabled.
      * Verifies if the notification listener service is enabled.

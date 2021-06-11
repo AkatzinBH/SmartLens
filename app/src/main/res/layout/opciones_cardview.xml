@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvPrincipal"
+    android:layout_width="@dimen/principal_card"
+    android:layout_height="@dimen/principal_card"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="5dp"
+    android:background="#FFFFFF"
+    android:padding="0dip"
+    card_view:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="0dip">
+
+        <ImageView
+            android:id="@+id/imgOpcion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/iconos_aka_bluetooth_02"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
