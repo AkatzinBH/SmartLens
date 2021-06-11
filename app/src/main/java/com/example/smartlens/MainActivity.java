@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
             for (BluetoothDevice device : DispositivosVinculados) {
                 if (device.getName().equals("raspberrypi")) {
                     mmDevice = device;
+
                 }
             }
         }
@@ -530,6 +531,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
             case 5:
                 Intent intent = new Intent(this,Temporizador.class);
+                intent.putExtra("BT", mmDevice.getAddress());
                 startActivity(intent);
                 break;
 

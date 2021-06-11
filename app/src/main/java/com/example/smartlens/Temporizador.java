@@ -2,14 +2,22 @@ package com.example.smartlens;
 //>, <
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.ref.WeakReference;
+import java.util.Set;
+import java.util.UUID;
 
 public class Temporizador extends AppCompatActivity {
 
@@ -24,11 +32,52 @@ public class Temporizador extends AppCompatActivity {
     private CountDownTimer temporizador;
     private long tiempoRestante;
     private boolean flag,flag2;
+    private BluetoothService mmBluetoothService;
+    private BluetoothDevice mmDevice;
+    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+    private Handler mHandler= new Temporizador.MyHandler2(this);
+
+    private class MyHandler2 extends Handler{
+        //crea un contexto para la clase de la cual se recibiran los mensajes
+        private WeakReference<Temporizador> mActivity;
+        //Constructo de la clase, obtiene como parametro la actividad
+        public MyHandler2(Temporizador activity) {
+            mActivity = new WeakReference<Temporizador>(activity);
+            //context=activity.getApplicationContext();
+        }
+        //SE soobreescribe el metodo para manejar los mensajes, que hacer en caso de que llegue un mensaje nuevo
+        @Override
+        public void handleMessage(Message msg) {
+            byte[] buffer = (byte[]) msg.obj;
+            switch (msg.what){
+                case 1:
+                    String MensajeCPU=new String(buffer,0,msg.arg1);
+                    Toast.makeText(Temporizador.this, "El Bluetooth ya esta encendido", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    }
+
+    int REQUEST_ENABLE_BL = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temporizador);
+        UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
+        Set<BluetoothDevice> DispositivosVinculados = bluetoothAdapter.getBondedDevices();
+        //obtener la direccion MAC de la raspberry
+        if (DispositivosVinculados.size() > 0) {
+            for (BluetoothDevice device : DispositivosVinculados) {
+                if (device.getName().equals("raspberrypi")) {
+                    mmDevice = device;
+
+                }
+            }
+        }
+
+        mmBluetoothService=new BluetoothService(Temporizador.this,mmDevice,uuid, mHandler);
 
         horas = (EditText) findViewById(R.id.etHoras);
         min = (EditText) findViewById(R.id.etMin);
@@ -143,6 +192,14 @@ public class Temporizador extends AppCompatActivity {
             public void onFinish() {
 
                 iniciarP.setText("Iniciar");
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Temporizador");
+                }
+                else
+                    {
+                        Toast.makeText(Temporizador.this, "No hay conexion bluetooth", Toast.LENGTH_LONG).show();
+                }
                 flag = true;
 
             }
