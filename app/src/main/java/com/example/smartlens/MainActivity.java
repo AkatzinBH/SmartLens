@@ -31,9 +31,11 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
     BluetoothDevice mmDevice = null;
     BluetoothService mmBluetoothService = null;
     static String VideoSeleccionado;
+    private MenuAdaptador adaptador;
     private ProgressBar progressBar;
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         listaOpciones = (RecyclerView) findViewById(R.id.rvMenuPrincial);
         GridLayoutManager glm = new GridLayoutManager(this,2);
         listaOpciones.setLayoutManager(glm);
-        MenuAdaptador adaptador = new MenuAdaptador(opciones,this);
+        adaptador = new MenuAdaptador(opciones,this);
         listaOpciones.setAdapter(adaptador);
 
         //Ayuda visual para mostrar que se esta estableciendo la conexion al BT
@@ -331,9 +334,35 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 6:
-                intent = new Intent(this,Figuras.class);
-                //intent.putExtra("BT", mmDevice.getAddress());
-                startActivity(intent);
+                adaptador.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
+                        popupMenu.getMenuInflater().inflate(R.menu.menu_figuras,popupMenu.getMenu());
+                        popupMenu.show();
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()){
+                                    case R.id.mpCirculo:
+                                        Toast.makeText(MainActivity.this, "Circulo", Toast.LENGTH_SHORT) .show();
+                                        break;
+                                    case R.id.mpFiguras:
+                                        Toast.makeText(MainActivity.this, "Figuras", Toast.LENGTH_SHORT) .show();
+                                        break;
+                                    case R.id.mpCubo:
+                                        Toast.makeText(MainActivity.this, "Cubo", Toast.LENGTH_SHORT) .show();
+                                        break;
+
+
+                                }
+                                return true;
+                            }
+                        });
+                    }
+                });
+
                 break;
 
             case 7:

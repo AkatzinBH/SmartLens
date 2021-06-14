@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MenuAdaptador extends RecyclerView.Adapter<MenuAdaptador.MenuAdaptadorViewHolder>{
+public class MenuAdaptador extends RecyclerView.Adapter<MenuAdaptador.MenuAdaptadorViewHolder> implements  View.OnClickListener{
 
     ArrayList<Menu> opciones;
     private onOpcionListener mListener;
+    private  View.OnClickListener listener;
 
     public MenuAdaptador(ArrayList<Menu> opciones, onOpcionListener listener)
     {
@@ -44,6 +45,11 @@ public class MenuAdaptador extends RecyclerView.Adapter<MenuAdaptador.MenuAdapta
         return opciones.size();
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
     public static class MenuAdaptadorViewHolder extends RecyclerView.ViewHolder implements onOpcionListener, View.OnClickListener {
         private ImageView imgOpcion;
 
@@ -65,10 +71,16 @@ public class MenuAdaptador extends RecyclerView.Adapter<MenuAdaptador.MenuAdapta
 
         }
 
+
         @Override
         public void onClick(View view) {
             listener.onOpcionClick(getAdapterPosition());
 
         }
     }
+    public  void  setOnClickListener(View.OnClickListener listener)
+    {
+        this.listener = listener;
+    }
+
 }
