@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         opciones.add(new Menu(R.drawable.iconos_akanotificaci_n_02));
         opciones.add(new Menu(R.drawable.iconos_aka_galer_a_02));
         opciones.add(new Menu(R.drawable.iconos_aka_temporizador_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_configuraci_n_02));
+        opciones.add(new Menu(R.drawable.iconos_aka_configuraci_n_02));
         opciones.add(new Menu(R.drawable.iconos_aka_bluetooth_02));
         opciones.add(new Menu(R.drawable.iconos_aka_informaci_n_02));
 
@@ -329,6 +331,18 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 6:
+                intent = new Intent(this,Figuras.class);
+                //intent.putExtra("BT", mmDevice.getAddress());
+                startActivity(intent);
+                break;
+
+            case 7:
+                intent = new Intent(this,Textos.class);
+                //intent.putExtra("BT", mmDevice.getAddress());
+                startActivity(intent);
+                break;
+
+            case 8:
                 //Metodo para confirmar que la app ya esta emparejada con la Raspberry
                 ObtenerDatosRaspBerry();
                 // Verifica los persimos si la version de android es mayor a la loolilop y si no los tiene los pide
@@ -364,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
 
 
                 break;
-                case 7:
+                case 9:
                 //imagen
                 break;
             default:
