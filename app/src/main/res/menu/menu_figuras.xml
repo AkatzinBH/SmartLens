@@ -6,7 +6,8 @@
     </item>
     <item
         android:id="@+id/mpFiguras"
-        android:title="Figuras">
+        android:title="Figuras"
+        >
     </item>
     <item
         android:id="@+id/mpCubo"

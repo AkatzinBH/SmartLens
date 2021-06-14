@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -345,9 +346,11 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
 
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_figuras,popupMenu.getMenu());
-                popupMenu.show();
+                Intent intent1 = new Intent(this, Figuras.class);
+                intent1.putExtra("Disp" , (Parcelable) mmBluetoothService);
+                startActivity(intent1);
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                /*popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
@@ -367,6 +370,9 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                     }
                 });
 
+                popupMenu.show();
+
+                */
                 break;
 
             case 7:
