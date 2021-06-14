@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
 
     private ArrayList<Menu> opciones;
     private RecyclerView listaOpciones;
+    private View view;
 
     // Declarar las variables que se utilizaran
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -122,6 +123,13 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         GridLayoutManager glm = new GridLayoutManager(this,2);
         listaOpciones.setLayoutManager(glm);
         adaptador = new MenuAdaptador(opciones,this);
+        adaptador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view = v;
+            }
+        });
+
         listaOpciones.setAdapter(adaptador);
 
         //Ayuda visual para mostrar que se esta estableciendo la conexion al BT
@@ -334,32 +342,28 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 6:
-                adaptador.setOnClickListener(new View.OnClickListener() {
+
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_figuras,popupMenu.getMenu());
+                popupMenu.show();
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
-                        popupMenu.getMenuInflater().inflate(R.menu.menu_figuras,popupMenu.getMenu());
-                        popupMenu.show();
-
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()){
-                                    case R.id.mpCirculo:
-                                        Toast.makeText(MainActivity.this, "Circulo", Toast.LENGTH_SHORT) .show();
-                                        break;
-                                    case R.id.mpFiguras:
-                                        Toast.makeText(MainActivity.this, "Figuras", Toast.LENGTH_SHORT) .show();
-                                        break;
-                                    case R.id.mpCubo:
-                                        Toast.makeText(MainActivity.this, "Cubo", Toast.LENGTH_SHORT) .show();
-                                        break;
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.mpCirculo:
+                                Toast.makeText(MainActivity.this, "Circulo", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.mpFiguras:
+                                Toast.makeText(MainActivity.this, "Figuras", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.mpCubo:
+                                Toast.makeText(MainActivity.this, "Cubo", Toast.LENGTH_SHORT).show();
+                                break;
 
 
-                                }
-                                return true;
-                            }
-                        });
+                        }
+                        return true;
                     }
                 });
 
