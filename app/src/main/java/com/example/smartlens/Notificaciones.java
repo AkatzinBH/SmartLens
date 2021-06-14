@@ -29,7 +29,7 @@ public class Notificaciones extends NotificationListenerService
      listen the notifications
   */
     private static final class ApplicationPackageNames {
-        public static final String INCALLUI_PACK_NAME = "com.samsung.android.incallui";
+        public static final String INCALLUI_PACK_NAME = "com.android.incallui";
         public static final String LLAMADAPERDIDA_PACK_NAME = "com.android.contacts";
         public static final String FACEBOOK_PACK_NAME = "com.facebook.katana";
         public static final String FACEBOOK_MESSENGER_PACK_NAME = "com.facebook.orca";

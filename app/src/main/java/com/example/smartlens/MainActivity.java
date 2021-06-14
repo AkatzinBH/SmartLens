@@ -128,50 +128,6 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         }
         EncenderBlue();
 
-        //Se crea un boton que tendra como refencia el BT y poder implementar los metodos que siguen
-        //ImageButton bluetooth = (ImageButton) findViewById(R.id.imageButton5);
-        //Habilitamos que el boton este al pendiente de ser apretado
-        /*bluetooth.setOnClickListener(new View.OnClickListener() {
-
-            //Al hacer click en el boton BT automaticamente se ejecuta metodo y el codigo que contenga en el
-            @Override
-            public void onClick(View v) {
-
-                //Metodo para confirmar que la app ya esta emparejada con la Raspberry
-                ObtenerDatosRaspBerry();
-                // Verifica los persimos si la version de android es mayor a la loolilop y si no los tiene los pide
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        System.out.println("Entro al if");
-
-
-                    } else {
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
-                            Toast.makeText(getBaseContext(), "Necesitamos agregar permisos de lectura", Toast.LENGTH_SHORT).show();
-
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
-
-
-                    }
-                }
-
-                //STring que indica el protocolo de comunicacion y el tipo dispositivo a conectar
-                UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
-
-                //Activamos la progressbar
-                progressBar.setVisibility(View.VISIBLE);
-
-                //SE intenta establecer la conexion con la Raspberry
-                mmBluetoothService=new BluetoothService(MainActivity.this,mmDevice,uuid, mHandler);
-
-                //Si la conexion fue exitosa, se quita la visibilidad de la progressbar
-                if (mmBluetoothService != null)
-                {
-                    progressBar.setVisibility(View.GONE);
-                }
-
-            }
-        });*/
 
         imageChangeBroadcastReceiver = new ReceiveBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -207,160 +163,6 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         }
     }
 
-
-
-    //Método para el botón Reloj
-    public void MensajeReloj(View view){
-
-        if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Reloj");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-
-
-    }
-
-    //Método para el botón Calendario
-    public void MensajeCalendario(View view){
-        if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Calendario");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-    }
-
-    //Método para el botón Clima
-    public void MensajeClima(View view){
-        if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Clima");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-    }
-
-    public void MensajeTemporizador(View view){
-        /*if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Clima");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }*/
-
-        Intent intent = new Intent(this,Temporizador.class);
-        startActivity(intent);
-    }
-
-    public void MensajeImagen(View view){
-        if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Imagen");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-    }
-
-
-    //Método para el botón Notificaciones
-    public void MensajeNotificaciones(View view){
-       if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Noti");
-            Log.d("btnNoti","entro");
-           /* new CountDownTimer(1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
-                    mmBluetoothService.write(Integer.toString(notificaciones.size()));
-                }
-            }.start();
-            */
-            new CountDownTimer(1000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                public void onFinish() {
-                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
-                    if (notificaciones.size() > 0)
-                    {
-                        for (Notificacion notificacion : notificaciones)
-                        {
-                            String noti = "";
-                            mmBluetoothService.write(" " + notificacion.getPaquete() + " ");
-                            mmBluetoothService.write(notificacion.getRemitente() + " ");
-                            mmBluetoothService.write(notificacion.getMensaje() + " ");
-                            mmBluetoothService.write(notificacion.getFechahora() + "\n");
-                            mmBluetoothService.write("");
-
-                            Log.d ("NotiBT","Notificacion: " + notificacion.getPaquete() + " De: " + notificacion.getRemitente() + " Mensaje: " +notificacion.getMensaje() + " a las: " + notificacion.getFechahora());
-
-                        }
-                        Log.d("NotiBT","Sale del For");
-                        new CountDownTimer(1000, 1000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                mmBluetoothService.write("Fin");
-                            }
-                        }.start();
-
-                    }
-                    else {
-                        mmBluetoothService.write("Fin");
-                    }
-
-                }
-            }.start();
-
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-    }
-
-    //Método para el botón BT
-   /* public boolean MensajeBT(View view){
-        Toast.makeText(this, "Esto es un mensaje para el BT", Toast.LENGTH_SHORT) .show();
-        return true;
-    }*/
-
-    //Método para el botón Información
-    public void MensajeInfo(View view){
-        if (mmBluetoothService != null)
-        {
-            mmBluetoothService.write("Info");
-        }
-        else
-        {
-            Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
-        }
-    }
-
     public void llamdaentrantre()
     {
         Log.d("IfMet:", "Entra el if del Metodo");
@@ -368,12 +170,35 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         {
             Log.d("IfMet:", "Intenta mandar");
             mmBluetoothService.write("Llamada");
-            mmBluetoothService.write("\n");
-            mmBluetoothService.write(" " + llamada.getPaquete() + " ");
-            mmBluetoothService.write(llamada.getRemitente() + " ");
-            mmBluetoothService.write(llamada.getMensaje() + " ");
-            mmBluetoothService.write(llamada.getFechahora() + "\n");
-            mmBluetoothService.write("Fin");
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    mmBluetoothService.write(llamada.getPaquete() + " ");
+                    mmBluetoothService.write(llamada.getRemitente() + " ");
+                    mmBluetoothService.write(llamada.getMensaje() + " ");
+                    mmBluetoothService.write( "\n");
+                }
+            }.start();
+
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+
+                }
+
+                @Override
+                public void onFinish() {
+                    mmBluetoothService.write("Fin");
+                }
+            }.start();
+
+
         }
         else
         {
@@ -391,27 +216,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
      * Changes the MainActivity image based on which notification was intercepted
      * @param notificationCode The intercepted notification code
      */
- /*   private void changeInterceptedNotificationImage(int notificationCode){
-        switch(notificationCode){
-            case Notificaciones.InterceptedNotificationCode.FACEBOOK_CODE:
-                    Toast.makeText(this,"Facebook",Toast.LENGTH_SHORT).show();
-                Log.d("NotificacionInt", "La notificacion interceptada fue de: Facebook");
-                break;
-            case Notificaciones.InterceptedNotificationCode.INSTAGRAM_CODE:
-                Toast.makeText(this,"Instagram",Toast.LENGTH_SHORT).show();
-                Log.d("NotificacionInt", "La notificacion interceptada fue de: Instagram");
-                break;
-            case Notificaciones.InterceptedNotificationCode.WHATSAPP_CODE:
-                Toast.makeText(this,"Whatsapp",Toast.LENGTH_SHORT).show();
-                Log.d("NotificacionInt", "La notificacion interceptada fue de: Whastapp");
-                break;
-            case Notificaciones.InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE:
-                Toast.makeText(this,"Otras apps",Toast.LENGTH_SHORT).show();
-                Log.d("NotificacionInt", "La notificacion interceptada fue de: Otro servicio");
-                break;
-        }
-    }
-*/
+
     private static final String TAG = "MyActivity";
 
     public void onOpcionClick(int position) {
@@ -457,19 +262,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 {
                     mmBluetoothService.write("Noti");
                     Log.d("btnNoti","entro");
-           /* new CountDownTimer(1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
 
-                }
-
-                @Override
-                public void onFinish() {
-                    Toast.makeText(MainActivity.this,"Tamaño:" + notificaciones.size(), Toast.LENGTH_SHORT) .show();
-                    mmBluetoothService.write(Integer.toString(notificaciones.size()));
-                }
-            }.start();
-            */
                     new CountDownTimer(1000, 1000) {
 
                         public void onTick(long millisUntilFinished) {
@@ -674,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
 
                     //tvMsg.setText("Notification : " + receivedNotificationCode + "\nPackages : " + packages + "\nTitle : " + title + "\nText : " + text + "\nId : " + date+ "\nandroid_id : " + android_id+ "\ndevicemodel : " + devicemodel);
                     Log.d("If llamada:", "Antes del if : " + packages);
-                    if (packages.matches("com.samsung.android.incallui")) //"com.android.incallui"
+                    if (packages.matches("com.android.incallui")) //"com.android.incallui"
                     {
                         Log.d("If llamada:", "Entra el if de la llamada");
                         llamada = new Notificacion(text, title,packages,date);
