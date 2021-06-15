@@ -55,15 +55,6 @@
             </androidx.appcompat.widget.Toolbar>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMenuPrincial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:layout_gravity="center">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
         <LinearLayout
         android:id="@+id/llMenu2"
         android:layout_width="match_parent"
@@ -88,7 +79,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/textView"
@@ -103,8 +95,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Name"
-                android:textColorHint="#000000"
+                android:textColor="#000000"
                  />
 
     </LinearLayout>
@@ -125,6 +116,8 @@
             android:layout_width="73dp"
             android:layout_height="43dp"
             android:ems="10"
+            android:textColorHint="#000000"
+            android:textColor="#000000"
             android:hint="Horas"
             android:inputType="number" />
 
@@ -133,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -141,6 +135,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:ems="10"
+            android:textColorHint="#000000"
+            android:textColor="#000000"
             android:hint="Min"
             android:inputType="number" />
 
@@ -149,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=":"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -157,7 +154,10 @@
             android:layout_width="49dp"
             android:layout_height="42dp"
             android:ems="10"
+            android:textColorHint="#000000"
+            android:textColor="#000000"
             android:hint="Seg"
+
             android:inputType="number" />
     </LinearLayout>
         <TextView
@@ -165,8 +165,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00:00"
+            android:textColor="#000000"
+
             android:textSize="34sp"
             android:layout_gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMenuPrincial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="10dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -673,7 +673,15 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
             public void onFinish() {
 
                 flag = true;
-                mmBluetoothService.write("Temporizador");
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Temporizador");
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+
 
             }
         }.start();
