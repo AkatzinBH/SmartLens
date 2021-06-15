@@ -343,42 +343,33 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 6:
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Figuras");
+                    intent = new Intent(this,Figuras.class);
+                    //intent.putExtra("BT", mmDevice.getAddress());
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
 
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
-                popupMenu.getMenuInflater().inflate(R.menu.menu_figuras,popupMenu.getMenu());
-                Intent intent1 = new Intent(this, Figuras.class);
-                intent1.putExtra("Disp" , (Parcelable) mmBluetoothService);
-                startActivity(intent1);
-
-                /*popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.mpCirculo:
-                                Toast.makeText(MainActivity.this, "Circulo", Toast.LENGTH_SHORT).show();
-                                break;
-                            case R.id.mpFiguras:
-                                Toast.makeText(MainActivity.this, "Figuras", Toast.LENGTH_SHORT).show();
-                                break;
-                            case R.id.mpCubo:
-                                Toast.makeText(MainActivity.this, "Cubo", Toast.LENGTH_SHORT).show();
-                                break;
-
-
-                        }
-                        return true;
-                    }
-                });
-
-                popupMenu.show();
-
-                */
                 break;
 
             case 7:
-                intent = new Intent(this,Textos.class);
-                //intent.putExtra("BT", mmDevice.getAddress());
-                startActivity(intent);
+                if (mmBluetoothService != null)
+                {
+                    mmBluetoothService.write("Textos");
+                    intent = new Intent(this,Textos.class);
+                    //intent.putExtra("BT", mmDevice.getAddress());
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+                }
+
                 break;
 
             case 8:
