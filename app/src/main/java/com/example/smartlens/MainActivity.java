@@ -676,6 +676,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 if (mmBluetoothService != null)
                 {
                     mmBluetoothService.write("Temporizador");
+                    stopTimer();
                 }
                 else
                 {
@@ -693,7 +694,6 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
     {
         temporizador.cancel();
         timerRunning = false;
-        tiempo = tiempoRestante;
     }
 
 }
