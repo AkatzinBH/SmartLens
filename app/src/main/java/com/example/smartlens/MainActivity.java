@@ -360,10 +360,24 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
             case 7:
                 if (mmBluetoothService != null)
                 {
+
                     mmBluetoothService.write("Textos");
-                    intent = new Intent(this,Textos.class);
-                    //intent.putExtra("BT", mmDevice.getAddress());
-                    startActivity(intent);
+                    new CountDownTimer(2000, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                            Intent intent2;
+                            intent2 = new Intent(MainActivity.this,Textos.class);
+                            //intent.putExtra("BT", mmDevice.getAddress());
+                            startActivity(intent2);
+                        }
+                    }.start();
+
                 }
                 else
                 {

@@ -75,8 +75,14 @@ public class Textos extends AppCompatActivity {
         //STring que indica el protocolo de comunicacion y el tipo dispositivo a conectar
         UUID uuid=UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee");
 
+        System.out.println("Antes de crear la conexion");
+
         //SE intenta establecer la conexion con la Raspberry
         mmBluetoothService=new BluetoothService(Textos.this,mmDevice,uuid, mHandler);
+
+        System.out.println("Despues de crear la conexion");
+
+
     }
 
     private void EncenderBlue() {
@@ -97,6 +103,7 @@ public class Textos extends AppCompatActivity {
                 for (BluetoothDevice device : DispositivosVinculados) {
                     if (device.getName().equals("raspberrypi")) {
                         mmDevice = device;
+                        System.out.println("Encuentra el dispositivo");
 
                     }
                 }
