@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -343,12 +344,18 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 6:
+                EditText edFiguras = (EditText) findViewById(R.id.etFiguras);
                 if (mmBluetoothService != null)
                 {
-                    mmBluetoothService.write("Figuras");
-                    intent = new Intent(this,Figuras.class);
-                    //intent.putExtra("BT", mmDevice.getAddress());
-                    startActivity(intent);
+                    if (!edFiguras.getText().toString().matches(""))
+                    {
+                        mmBluetoothService.write("Figura" + edFiguras.getText().toString());
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Ingrese un numero de figura", Toast.LENGTH_SHORT) .show();
+                    }
+
                 }
                 else
                 {
@@ -358,12 +365,17 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 break;
 
             case 7:
+
+                EditText edTextos = (EditText) findViewById(R.id.etTextos);
                 if (mmBluetoothService != null)
                 {
-                    mmBluetoothService.write("Textos");
-                    intent = new Intent(this,Textos.class);
-                    //intent.putExtra("BT", mmDevice.getAddress());
-                    startActivity(intent);
+                    if (!edTextos.getText().toString().matches("")) {
+                        mmBluetoothService.write("Texto" + edTextos.getText().toString());
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Ingrese un numero de texto", Toast.LENGTH_SHORT) .show();
+                    }
                 }
                 else
                 {
