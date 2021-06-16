@@ -683,6 +683,7 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
                 else
                 {
                     Toast.makeText(MainActivity.this, "No hay conexion BT", Toast.LENGTH_SHORT) .show();
+
                 }
 
 
