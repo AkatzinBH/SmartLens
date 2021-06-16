@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Textos"></activity>
+        <activity android:name=".Informacion"></activity>
+        <activity android:name=".Textos" />
         <activity android:name=".Figuras" />
         <activity android:name=".Temporizador" />
         <activity android:name=".MainActivity">

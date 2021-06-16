@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         opciones.add(new Menu(R.drawable.iconos_akanotificaci_n_02));
         opciones.add(new Menu(R.drawable.iconos_aka_galer_a_02));
         opciones.add(new Menu(R.drawable.iconos_aka_temporizador_02));
-        opciones.add(new Menu(R.drawable.iconos_aka_configuraci_n_02));
-        opciones.add(new Menu(R.drawable.iconos_aka_configuraci_n_02));
+        opciones.add(new Menu(R.drawable.otros_iconos_aka_figuras_02));
+        opciones.add(new Menu(R.drawable.otros_iconos_aka_texto_02));
         opciones.add(new Menu(R.drawable.iconos_aka_bluetooth_02));
         opciones.add(new Menu(R.drawable.iconos_aka_informaci_n_02));
 
@@ -208,18 +208,21 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         {
             Log.d("IfMet:", "Intenta mandar");
             mmBluetoothService.write("Llamada");
+
+
+
             new CountDownTimer(1000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-
+                    mmBluetoothService.write(" " + llamada.getPaquete() + " ");
+                    mmBluetoothService.write(llamada.getRemitente() + " ");
+                    mmBluetoothService.write(llamada.getMensaje() + " ");
+                    mmBluetoothService.write( "\n");
                 }
 
                 @Override
                 public void onFinish() {
-                    mmBluetoothService.write(llamada.getPaquete() + " ");
-                    mmBluetoothService.write(llamada.getRemitente() + " ");
-                    mmBluetoothService.write(llamada.getMensaje() + " ");
-                    mmBluetoothService.write( "\n");
+                    mmBluetoothService.write("Fin");
                 }
             }.start();
 
@@ -460,8 +463,9 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
 
                 break;
                 case 9:
-                //imagen
-                break;
+                    Intent intent = new Intent(MainActivity.this,Informacion.class);
+                    startActivity(intent);
+                    break;
             default:
                 break;
         }
