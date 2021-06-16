@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
     //BluetoothSocket mmSocket;
     BluetoothDevice mmDevice = null;
     BluetoothService mmBluetoothService = null;
-    static String VideoSeleccionado;
     private MenuAdaptador adaptador;
     private ProgressBar progressBar;
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
@@ -97,9 +96,8 @@ public class MainActivity extends AppCompatActivity implements onOpcionListener 
         //Constructo de la clase, obtiene como parametro la actividad
         public MyHandler(MainActivity activity) {
             mActivity = new WeakReference<MainActivity>(activity);
-            //context=activity.getApplicationContext();
         }
-        //SE soobreescribe el metodo para manejar los mensajes, que hacer en caso de que llegue un mensaje nuevo
+        //Se soobreescribe el metodo para manejar los mensajes, que hacer en caso de que llegue un mensaje nuevo
         @Override
         public void handleMessage(Message msg) {
             byte[] buffer = (byte[]) msg.obj;
